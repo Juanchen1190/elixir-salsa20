@@ -1,8 +1,9 @@
 defmodule Mix.Tasks.Compile.Salsa20 do
   def run(_) do
     if match? {:win32, _}, :os.type do
-      {result, _error_code} = System.cmd("nmake", ["/F", "Makefile.win", "priv\\salsa20_nif.dll"], stderr_to_stdout: true)
-      IO.binwrite result
+      # I don't know how to compile in Windows platform, really sorry!
+      IO.warn("Windows is not supported.")
+      exit(1);
     else
       {result, _error_code} = System.cmd("make", ["priv/salsa20_nif.so"], stderr_to_stdout: true)
       IO.binwrite result
