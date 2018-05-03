@@ -1,3 +1,16 @@
+defmodule Mix.Tasks.Compile.Salsa20 do
+  def run(_) do
+    if match? {:win32, _}, :os.type do
+      {result, _error_code} = System.cmd("nmake", ["/F", "Makefile.win", "priv\\salsa20_nif.dll"], stderr_to_stdout: true)
+      IO.binwrite result
+    else
+      {result, _error_code} = System.cmd("make", ["priv/salsa20_nif.so"], stderr_to_stdout: true)
+      IO.binwrite result
+    end
+    :ok
+  end
+end
+
 defmodule Salsa20.MixProject do
   use Mix.Project
 
@@ -7,6 +20,7 @@ defmodule Salsa20.MixProject do
       version: "0.1.0",
       elixir: "~> 1.6",
       start_permanent: Mix.env() == :prod,
+      compilers: [:salsa20, :elixir, :app],
       deps: deps()
     ]
   end
